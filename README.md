@@ -507,3 +507,27 @@ Next dig into the key features:
 - Reads vs writes?
 
 Secure System Design 
+
+
+# SSH-ing somewhere
+
+When you SSH (Secure Shell) to an IP address, you're initiating a connection to a remote server. Below is a step-by-step breakdown of what happens when you establish an SSH connection:
+
+1. **Request Initiation:**
+You start by initiating an SSH connection from your local machine. This is often done using a terminal or command-line interface. You input the SSH command followed by the IP address of the remote server and your credentials.
+2. **Connection Request:**
+Your local SSH client sends a connection request to the SSH server running on the remote machine, specifying the IP address, username, and the encryption algorithms it supports.
+3. **Server Verification:**
+The server responds with its identification and its public key. If this is your first connection to the server, your SSH client might prompt you to verify the server's fingerprint or key. This is to ensure you're connecting to the correct server and not a potential man-in-the-middle attacker.
+4. **Key Exchange and Encryption Negotiation:**
+The SSH client and server then negotiate encryption methods and a shared encryption key to secure the connection. This usually involves a process where they agree on a symmetric encryption algorithm, such as AES, and use asymmetric cryptography (like RSA or ECDSA) for secure key exchange.
+5. **Authentication:**
+You provide your username and, if using password-based authentication, you enter your password. Alternatively, you might use SSH keys for authentication. The server verifies your credentials.
+6. **Shell Establishment:**
+After successful authentication, the server starts a secure shell session, allowing you to interact with the remote system. You're presented with a command prompt on the remote server, and from here, you can execute commands as if you were physically present on that machine.
+7. **Data Transfer and Communication:**
+All the communication between your local machine and the remote server is now encrypted, ensuring that any commands, data, or information transmitted between the two systems remain secure and protected from eavesdropping.
+8. **Connection Termination:**
+When you're done with your tasks, you can exit the SSH session. This terminates the secure connection between your local machine and the remote server.
+
+The SSH protocol is designed to provide a secure way to access remote systems, offering encrypted communication, secure authentication, and a secure channel for remote administration and file transfer. It's crucial in ensuring the confidentiality and integrity of data transferred between your local system and the remote server.
