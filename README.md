@@ -140,6 +140,34 @@ Session Hijacking
 
 ---
 
+## Web Application
+
+### Terminology
+
+- Content Security Policy : allows developers to define a set of rules about the types of content that are allowed to be executed (script-src, img-src etc.)
+- SOP (Same Origin Policy)
+    - Ensures cross domain requests aren't allowed
+- CORS
+    - Cross Origin Resource Sharing
+    - allows one domain to request resources from another domain
+    - Extends flexibility to SOP
+    - Ensure whitelists are properly implemented and not too permissive
+
+1. CSRF (Cross Site Request Forgery) - Make a victim do something they didn't wanna do. Change account email, delete account etc
+    - Requirements for CSRF -
+        - A relevant Action
+        - Cookie based session handling
+        - No unpredictable parameters
+    - Prevention - CSRF TOKENS
+        - Unpredictable with high entropy, as for session tokens in general.
+        - Tied to the user's session.
+        - Strictly validated in every case before the relevant action is executed.
+    - Prevention - SameSite Cookies
+        - Make sure the browser does not include the cookies by default (Strict Mode)
+        - Lax mode - only for GET requests and never for links that execute scripts etc
+    - Prevention - Referrer Header - used to verify the source of request is from within the org
+    
+
 OWASP Top 10
 
 ## Broken Access Control
@@ -163,20 +191,7 @@ Prevention:
 7. Timely invalidation of stateful session identifiers
 
 1. Path Traversal :
-2. CSRF (Cross Site Request Forgery) - Make a victim do something they didn't wanna do. Change account email, delete account etc
-    - Requirements for CSRF -
-        - A relevant Action
-        - Cookie based session handling
-        - No unpredictable parameters
-    - Prevention - CSRF TOKENS
-        - Unpredictable with high entropy, as for session tokens in general.
-        - Tied to the user's session.
-        - Strictly validated in every case before the relevant action is executed.
-    - Prevention - SameSite Cookies
-        - Make sure the browser does not include the cookies by default (Strict Mode)
-        - Lax mode - only for GET requests and never for links that execute scripts etc
-    - Prevention - Referrer Header - used to verify the source of request is from within the org
-    - Content Security Policy : allows developers to define a set of rules about the types of content that are allowed to be executed (script-src, img-src etc.)
+
 3. GET vs PUT vs POST - Security
 - GET parameters are passed via URL. This means that parameters are stored in server logs, and browser history. When using GET, it makes it very easy to alter the data being submitted the the server as well, as it is right there in the address bar to play with.
 - POST will not deter a malicious user though
@@ -210,17 +225,11 @@ Prevention:
     - Verify all signatures, ensure encryption ensured
     - Prevent against parameter tampering
     - Use expiry date for tokens and enable feature to revoke tokens
-1. SOP (Same Origin Policy)
-- Ensures cross domain requests aren't allowed
+
 
 ---
 
-### CORS
 
-- Cross Origin Resource Sharing
-- allows one domain to request resources from another domain
-- Extends flexibility to SOP
-- Ensure whitelists are properly implemented and not too permissive
 
 Security Risks: 
 
@@ -238,11 +247,6 @@ How to secure
     1. why? Ensures client-side denial before a request hits the server/starts being processed 
 3. Restrict allowed HTTP methods
 
-### SOP
-
-Restricts how a document/script loaded from one origin can interact w resources from another origin 
-
-CORS extends SOP
 
 ---
 
@@ -652,6 +656,13 @@ Kubernetes
 
 ![Screenshot 2023-11-07 at 9.23.59 PM.png](Security%20Engineer%20Interview%20Prep%200c03cb369adb4fa393289dc2902ec054/Screenshot_2023-11-07_at_9.23.59_PM.png)
 
-## Meta
+## Interview questions in the wild
 
-1. You have to connect a remote employee to a company resource - walk me down the process.
+1. You have to connect a remote employee to a company resource - walk me down the process. (Meta)
+Expedia
+2. Difference between Linux & Mac OS
+3. 2 encryption algorithms - how do they work
+4. Difference between Python, Java, C++
+5. Why do we need to define type in C/C++ but not in python
+6. Other trivia type random questions 
+
